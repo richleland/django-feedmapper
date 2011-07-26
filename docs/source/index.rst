@@ -10,8 +10,8 @@ Existing solutions in the same vain
 * https://github.com/tabo/feedjack
 * https://github.com/matagus/django-planet
 
-Feed types supported
-********************
+Feed types of interest
+**********************
 
 * `Atom`_
 * `NITF`_
@@ -22,6 +22,41 @@ Feed types supported
 .. _NITF: http://www.iptc.org/site/News_Exchange_Formats/NITF/
 .. _Prism: http://www.idealliance.org/specifications/prism/
 .. _RSS: http://en.wikipedia.org/wiki/Rss
+
+NGC feeds
+*********
+
+.. note:: remove this before finalizing application
+
+The XML from the NGC feed looks like the following:
+
+.. code-block:: xml
+
+    <?xml version="1.0" ?>
+    <channel_guide>
+        <series>
+            <title><![CDATA[	World's Toughest Prisons	]]></title>
+            <description><![CDATA[	No description available	]]></description>
+            <episode>
+                <code>276425</code>
+                <title><![CDATA[	World's Toughest Prisons [TV-14 LSV]	]]></title>
+                <final_title><![CDATA[	World's Toughest Prisons	]]></final_title>
+                <episode_title><![CDATA[	World's Toughest Prisons	]]></episode_title>
+                <vchip_rating><![CDATA[	TV-14 LSV	]]></vchip_rating>
+                <traffic_package>NISD</traffic_package>
+                <traffic_episode>3144</traffic_episode>
+                <description_oneline><![CDATA[	Go behind the bars of two of the worlds toughest prisons, including one run by the inmates.	]]></description_oneline>
+                <description><![CDATA[	NGC goes behind bars to see how inmates at two of the World's Toughest Prisons, Santa Martha in Mexico and Lurigancho in Peru, survive amid chaos, corruption and power struggles.  In Santa Martha, meet two former L.A. gang members who've formed an unlikely alliance to protect themselves. Then, at Lurigancho, authorities have handed over power to a council of inmate leaders. Meet two of these leaders, including a former head of a gang, and see how they maintain the fragile peace.	]]></description>
+                <duration>60M</duration>
+                <theme><![CDATA[	People & Places	]]></theme>
+                <geocore><![CDATA[	Science & Space	]]></geocore>
+                <webpub_leadtime>40</webpub_leadtime>
+                <showTime premiere_type="">2011-07-31T20:00-4:00</showTime>
+                <showTime premiere_type="">2011-07-31T23:00-4:00</showTime>
+                <showTime premiere_type="">2011-08-07T10:00-4:00</showTime>
+            </episode>
+        </series>
+    </channel_guide>
 
 Parsers
 *******
