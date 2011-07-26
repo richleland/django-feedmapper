@@ -1,6 +1,8 @@
 django-feedmapper
 =================
 
+django-feedmapper is a library for synchronizing data from feeds with Django models.
+
 Existing solutions in the same vain
 ***********************************
 
@@ -29,7 +31,7 @@ Parsers
 Parsers should:
 
 * Subclass the base Parser class
-* Use `lxml`_ to traverse feeds
+* Use `lxml`_ to traverse XML feeds
 * Define the xpath to a collection of items within the feed
 * Provide methods for parsing a mapping
 * Store the parsed raw XML and, if it has not changed, do nothing (bad idea?)
@@ -62,6 +64,17 @@ Questions to be answered:
 * How do we map one field from a feed to one field from a model?
 * How do we map many fields from a feed to one field from a model? (map to method?)
 * How do we handle mapping to a model that has inlines/relationships? (e.g. shows with air datetimes)
+
+Execution of updates
+********************
+
+Mappings define when and what should be updated. The execution should be handled by `celery`_ workers. We need to have a way to create scheduled tasks dynamically. The `django-celery`_ library handles this using `custom scheduler classes`_.
+
+We may want to consider creating management commands to handle the synchronization as well that can be set up as cron jobs.
+
+.. _celery: http://celeryproject.org/
+.. _django-celery: http://packages.python.org/django-celery/
+.. _custom scheduler classes: http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#using-custom-scheduler-classes
 
 Contents
 ********
