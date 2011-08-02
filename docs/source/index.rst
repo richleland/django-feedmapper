@@ -14,7 +14,6 @@ Parsers should:
 * Use `lxml`_ to traverse XML feeds
 * Define the xpath to a collection of items within the feed
 * Provide methods for parsing a mapping
-* Store the parsed raw XML and, if it has not changed, do nothing (bad idea?)
 * Handle translation of feed data type to model data type (e.g. date)
 
 .. _lxml: http://lxml.de/
@@ -26,11 +25,11 @@ Mapping
 
 Mappings should:
 
-* Have a field that points to a model
 * Have a field that stores the url of a feed
 * Have a field that stores the type of feed (which is really the parser)
 * Have a field that stores a JSON representation of the mapping
 * Create or update a scheduled task on save
+* Store the parsed data and, if it has not changed, do nothing (hashed? raw?)
 
 A user should be able to:
 
@@ -44,6 +43,56 @@ Questions to be answered:
 * How do we map one field from a feed to one field from a model?
 * How do we map many fields from a feed to one field from a model? (map to method?)
 * How do we handle mapping to a model that has inlines/relationships? (e.g. shows with air datetimes)
+
+The core of the mapping lies in specifying a JSON map:
+
+.. code-block:: javascript
+
+    {
+        "models": [
+            "myapp.Show": {
+                "identifier": "NEEDS UNIQUE IDENTIFIER",
+                "fields": [
+                    "title": "series.title",
+                    "description": "series.description",
+                ]
+            },
+            "myapp.Episode": {
+                "nodePath": "series.episode",
+                "identifier": "code",
+                "fields": [
+                    "show": "FK! HOW TO OBTAIN SHOW",
+                    "code": "code",
+                    "title": "title",
+                    "final_title": "final_title",
+                    "episode_title": "episode_title",
+                    "vchip_rating": "vchip_rating",
+                    "traffic_package": "traffic_package",
+                    "traffic_episode": "traffic_episode",
+                    "description_oneline": "description_oneline",
+                    "description": "description",
+                    "duration": {
+                        "transormer": "convert_length",
+                        "fields": ["duration"]
+                    },
+                    "theme": "theme",
+                    "geocore": "geocore",
+                    "webpub_leadtime": "webpub_leadtime",
+                ]
+            },
+            "myapp.ShowTime": {
+                "identifier": "NEEDS UNIQUE IDENTIFIER",
+                "fields": [
+                    "episode": "FK! HOW TO OBTAIN EPISODE",
+                    "premiere_type": "series.episode.showTime[@premiere_type]",
+                    "date": {
+                        "transformer": "convert_date",
+                        "fields": ["series.episode.showTime"]
+                    }
+                ]
+            }
+        ]
+    }
 
 Execution of updates
 ********************
