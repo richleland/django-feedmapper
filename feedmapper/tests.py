@@ -12,11 +12,9 @@ class FeedMapperTests(TestCase):
         self.mapping = Mapping.objects.get(pk=1)
         self.parser = XMLParser(self.mapping)
 
-    def test_parser_grabs_models(self):
-        "Ensure the parser can grab the models from the JSON mapping."
-        models = [User, Group]
-        parsed_models = self.parser.grab_models()
-        self.assertEqual(models, parsed_models)
+    def test_parser(self):
+        "Dummy test to call the parse method temporarily."
+        self.parser.parse()
 
     def test_model_format_validation_passes(self):
         "Ensure that validation passes if JSON mapping models are formatted properly."

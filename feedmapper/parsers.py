@@ -13,13 +13,6 @@ class XMLParser(object):
             return False
         return True
 
-    def grab_models(self):
-        model_strings = self.mapping.data_map['models'].keys()
-        for model_string in model_strings:
-            if not self.validate_model_format(model_string):
-                raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
-        return [get_model(*model_string.split('.')) for model_string in model_strings]
-
     def parse(self):
         """
         PSEUDOCODE
@@ -30,5 +23,23 @@ class XMLParser(object):
                 instance[model_field] = mapped_to # lots of magic in mapped_to
             instance.save()
         """
-        pass
+        model_mappings = self.mapping.data_map['models']
+        for model_string, configuration in model_mappings.items():
+            if not self.validate_model_format(model_string):
+                raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
+            model = get_model(*model_string.split("."))
+            identifier = configuration['identifier']
+            fields = configuration['fields']
+            instance = model()
+            for field, target in fields.items():
+                # perform logic to determine type of mapping (one to one, one to many, one to transformer)
+                if isinstance(target, basestring):
+                    print "%s is mapped to one field" % field
+                elif isinstance(target, list):
+                    print "%s is mapped to many fields" % field
+                elif isinstance(target, dict):
+                    print "%s is mapped using a transformer" % field
+                setattr(instance, field, target)
+            #instance.save()
+            print instance
 
