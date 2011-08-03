@@ -18,6 +18,16 @@ class FeedMapperTests(TestCase):
         parsed_models = self.parser.grab_models()
         self.assertEqual(models, parsed_models)
 
+    def test_model_format_validation_passes(self):
+        "Ensure that validation passes if JSON mapping models are formatted properly."
+        model_strings = ['myapp.MyModel', 'myapp.AnotherModel']
+        self.assertTrue(self.parser.validate_model_format(model_strings))
+
+    def test_model_format_validation_fails(self):
+        "Ensure that validation fails if JSON mapping models are formatted improperly."
+        model_strings = ['myapp.fail.MyModel', 'fail.myapp.AnotherModel']
+        self.assertFalse(self.parser.validate_model_format(model_strings))
+
     def test_parser_grabs_fields(self):
         "Ensure the parser can grab the fields from the JSON mapping."
         pass
