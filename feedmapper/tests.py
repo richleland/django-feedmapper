@@ -1,13 +1,22 @@
+from django.contrib.auth.models import User, Group
 from django.test import TestCase
+
+from .models import Mapping
+from .parsers import XMLParser
 
 
 class FeedMapperTests(TestCase):
+    fixtures = ['test_data.json']
+
     def setUp(self):
-        pass
+        self.mapping = Mapping.objects.get(pk=1)
+        self.parser = XMLParser(self.mapping)
 
     def test_parser_grabs_models(self):
         "Ensure the parser can grab the models from the JSON mapping."
-        pass
+        models = [User, Group]
+        parsed_models = self.parser.grab_models()
+        self.assertEqual(models, parsed_models)
 
     def test_parser_grabs_fields(self):
         "Ensure the parser can grab the fields from the JSON mapping."

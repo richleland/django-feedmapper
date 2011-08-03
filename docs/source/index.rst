@@ -49,50 +49,50 @@ The core of the mapping lies in specifying a JSON map:
 .. code-block:: javascript
 
     {
-        "models": [
-            "myapp.Show": {
-                "identifier": "NEEDS UNIQUE IDENTIFIER",
-                "fields": [
-                    "title": "series.title",
-                    "description": "series.description",
-                ]
-            },
-            "myapp.Episode": {
-                "nodePath": "series.episode",
-                "identifier": "code",
-                "fields": [
-                    "show": "FK! HOW TO OBTAIN SHOW",
-                    "code": "code",
-                    "title": "title",
-                    "final_title": "final_title",
-                    "episode_title": "episode_title",
-                    "vchip_rating": "vchip_rating",
-                    "traffic_package": "traffic_package",
-                    "traffic_episode": "traffic_episode",
-                    "description_oneline": "description_oneline",
-                    "description": "description",
-                    "duration": {
-                        "transormer": "convert_length",
-                        "fields": ["duration"]
-                    },
-                    "theme": "theme",
-                    "geocore": "geocore",
-                    "webpub_leadtime": "webpub_leadtime",
-                ]
-            },
-            "myapp.ShowTime": {
-                "identifier": "NEEDS UNIQUE IDENTIFIER",
-                "fields": [
-                    "episode": "FK! HOW TO OBTAIN EPISODE",
-                    "premiere_type": "series.episode.showTime[@premiere_type]",
-                    "date": {
-                        "transformer": "convert_date",
-                        "fields": ["series.episode.showTime"]
-                    }
-                ]
-            }
-        ]
+      "models": {
+        "myapp.ShowTime": {
+          "fields": {
+            "date": {
+              "fields": [
+                "series.episode.showTime"
+              ], 
+              "transformer": "convert_date"
+            }, 
+            "premiere_type": "series.episode.showTime[@premiere_type]", 
+            "episode": "FK! HOW TO OBTAIN EPISODE"
+          }, 
+          "identifier": "NEEDS UNIQUE IDENTIFIER"
+        }, 
+        "myapp.Episode": {
+          "nodePath": "series.episode", 
+          "identifier": "code", 
+          "fields": {
+            "code": "code", 
+            "description": "description", 
+            "show": "FK! HOW TO OBTAIN SHOW", 
+            "final_title": "final_title", 
+            "duration": "duration", 
+            "title": "title", 
+            "episode_title": "episode_title", 
+            "theme": "theme", 
+            "description_oneline": "description_oneline", 
+            "webpub_leadtime": "webpub_leadtime", 
+            "traffic_package": "traffic_package", 
+            "vchip_rating": "vchip_rating", 
+            "traffic_episode": "traffic_episode", 
+            "geocore": "geocore"
+          }
+        }, 
+        "myapp.Show": {
+          "fields": {
+            "description": "series.description", 
+            "title": "series.title"
+          }, 
+          "identifier": "NEEDS UNIQUE IDENTIFIER"
+        }
+      }
     }
+
 
 Execution of updates
 ********************
