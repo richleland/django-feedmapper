@@ -4,7 +4,7 @@
         "model": "feedmapper.mapping", 
         "fields": {
             "data_url": "http://cnn.com/", 
-            "parser": "feedmapper.XMLParser", 
+            "parser": "feedmapper.parsers.XMLParser", 
             "data_map": {
                 "models": {
                     "auth.User": {

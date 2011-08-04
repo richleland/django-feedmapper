@@ -5,8 +5,7 @@ import jsonfield
 
 
 PARSER_CHOICES = (
-    ('someapp.AtomParser', 'Atom'),
-    ('someapp.RSSParser', 'RSS'),
+    ('feedmapper.parsers.XMLParser', 'XML'),
 )
 
 class Mapping(models.Model):
@@ -20,3 +19,11 @@ class Mapping(models.Model):
 
     def __unicode__(self):
         return self.label
+
+    def parse(self):
+        "Dynamically pull in this mapping's parser and parse the mapping."
+        module_path, parser_class = self.parser.rsplit('.', 1)
+        module = __import__(module_path, fromlist=[parser_class])
+        parser_class = getattr(module, parser_class)
+        parser = parser_class(self)
+        parser.parse()

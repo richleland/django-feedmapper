@@ -20,11 +20,8 @@ class FeedMapperTests(TestCase):
 
     def setUp(self):
         self.mapping = Mapping.objects.get(pk=1)
+        self.mapping.parse()
         self.parser = XMLParser(self.mapping)
-
-    def test_parser(self):
-        "Dummy test to call the parse method temporarily."
-        self.parser.parse()
 
     def test_model_format_validation_passes(self):
         "Ensure that validation passes if JSON mapping models are formatted properly."
@@ -35,14 +32,6 @@ class FeedMapperTests(TestCase):
         "Ensure that validation fails if JSON mapping models are formatted improperly."
         model_string = 'myapp.fail.MyModel'
         self.assertFalse(self.parser.validate_model_format(model_string))
-
-    def test_parser_grabs_fields(self):
-        "Ensure the parser can grab the fields from the JSON mapping."
-        pass
-
-    def test_parser_handles_nodepath(self):
-        "Ensure the parser can handle JSON with nodePath specified in it."
-        pass
 
     def test_parser_one_to_one(self):
         "Ensure the parser can handle a one-to-one model field to feed node mapping."
