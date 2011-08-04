@@ -9,6 +9,7 @@ class Thing(models.Model):
     "Dummy model for testing."
     email = models.EmailField()
     name = models.CharField(max_length=255)
+    combined = models.TextField()
 
     def convert_name(self, first_name, last_name):
         return "%s %s" % (first_name, last_name)

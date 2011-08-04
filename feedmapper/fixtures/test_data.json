@@ -21,6 +21,7 @@
                     "feedmapper.Thing": {
                         "fields": {
                             "id": "id",
+                            "combined": ["email", "first_name", "last_name"],
                             "email": "email", 
                             "name": {
                               "transformer": "convert_name",

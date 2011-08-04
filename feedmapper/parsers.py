@@ -49,6 +49,11 @@ class Parser(object):
 class XMLParser(Parser):
     "A parser for XML that does not follow any standard."
 
+    def join_fields(self, node, fields):
+        "Joins the text for the specified fields."
+        values = [node.find(field).text for field in fields]
+        return " ".join(values)
+
     def parse(self):
         """
         PSEUDOCODE
@@ -77,16 +82,16 @@ class XMLParser(Parser):
                 for field, target in fields.items():
                     if field != identifier:
                         if isinstance(target, basestring):
+                            # maps one model field to one feed node
                             value = node.find(target).text
-                            print "%s is mapped to one field: %s" % (field, value)
                         elif isinstance(target, list):
-                            print "%s is mapped to many fields" % field
+                            # maps one model field to multiple feed nodes
+                            value = self.join_fields(node, target)
                         elif isinstance(target, dict):
+                            # maps one model field to a transformer method
                             transformer = getattr(instance, target['transformer'])
                             text_list = [node.find(field).text for field in target['fields']]
                             value = transformer(*text_list)
-                            print value
-                            print "%s is mapped using a transformer" % field
                         setattr(instance, field, value)
                 instance.save()
 
