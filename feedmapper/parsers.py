@@ -31,9 +31,8 @@ XML_DUMMY = """<?xml version="1.0" ?>
 </auth>
 """
 
-class XMLParser(object):
-    "Basic XML to Django model parser"
-
+class Parser(object):
+    "Base paarser class for mapping Django model fields to feed nodes."
     def __init__(self, mapping):
         self.mapping = mapping
 
@@ -42,6 +41,13 @@ class XMLParser(object):
         if not '.' in model_string or model_string.count('.') > 1:
             return False
         return True
+
+    def parse(self):
+        raise NotImplementedError("You must override the parse method in a Parser subclass.")
+
+
+class XMLParser(Parser):
+    "A parser for XML that does not follow any standard."
 
     def parse(self):
         """
