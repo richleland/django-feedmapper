@@ -9,19 +9,22 @@
                 "models": {
                     "auth.User": {
                         "fields": {
-                            "id": "users.user.id",
-                            "email": "users.user.email", 
-                            "first_name": "users.user.first_name",
-                            "last_name": "users.user.last_name"
+                            "id": "id",
+                            "username": "username", 
+                            "email": "email", 
+                            "first_name": "first_name",
+                            "last_name": "last_name"
                         }, 
-                        "identifier": "id"
+                        "identifier": "id",
+                        "nodePath": "users.user"
                     },
                     "auth.Group": {
                         "fields": {
-                            "id": "groups.group.id",
-                            "name": "groups.group.name"
+                            "id": "id",
+                            "name": "name"
                         }, 
-                        "identifier": "id"
+                        "identifier": "id",
+                        "nodePath": "groups.group"
                     }
                 }
             }, 
