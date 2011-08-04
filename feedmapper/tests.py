@@ -1,8 +1,17 @@
-from django.contrib.auth.models import User, Group
+from django.db import models
 from django.test import TestCase
 
 from .models import Mapping
 from .parsers import XMLParser
+
+
+class Thing(models.Model):
+    "Dummy model for testing."
+    email = models.EmailField()
+    name = models.CharField(max_length=255)
+
+    def convert_name(self, first_name, last_name):
+        return "%s %s" % (first_name, last_name)
 
 
 class FeedMapperTests(TestCase):

@@ -18,6 +18,18 @@
                         "identifier": "id",
                         "nodePath": "users.user"
                     },
+                    "feedmapper.Thing": {
+                        "fields": {
+                            "id": "id",
+                            "email": "email", 
+                            "name": {
+                              "transformer": "convert_name",
+                              "fields": ["first_name", "last_name"]
+                            }
+                        },
+                        "identifier": "id",
+                        "nodePath": "users.user"
+                    },
                     "auth.Group": {
                         "fields": {
                             "id": "id",

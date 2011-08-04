@@ -77,11 +77,15 @@ class XMLParser(Parser):
                 for field, target in fields.items():
                     if field != identifier:
                         if isinstance(target, basestring):
-                            value = node.xpath(target)[0].text
+                            value = node.find(target).text
                             print "%s is mapped to one field: %s" % (field, value)
                         elif isinstance(target, list):
                             print "%s is mapped to many fields" % field
                         elif isinstance(target, dict):
+                            transformer = getattr(instance, target['transformer'])
+                            text_list = [node.find(field).text for field in target['fields']]
+                            value = transformer(*text_list)
+                            print value
                             print "%s is mapped using a transformer" % field
                         setattr(instance, field, value)
                 instance.save()
