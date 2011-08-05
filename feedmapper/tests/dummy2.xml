@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<auth>
+    <users>
+        <user>
+            <id>1</id>
+            <username>tyranus</username>
+            <first_name>Count</first_name>
+            <last_name>Dooku</last_name>
+            <email>tyranus@sith.org</email>
+        </user>
+    </users>
+    <groups>
+        <group>
+            <id>1</id>
+            <name>Sith</name>
+        </group>
+        <group>
+            <id>2</id>
+            <name>Jedi</name>
+        </group>
+    </groups>
+</auth>

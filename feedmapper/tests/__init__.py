@@ -1,66 +1,15 @@
+import os
 from StringIO import StringIO
 
 from django.db import models
 from django.test import TestCase
 
-from .models import Mapping
-from .parsers import XMLParser
+from feedmapper.models import Mapping
+from feedmapper.parsers import XMLParser
 
 
-XML_DUMMY = """<?xml version="1.0" ?>
-<auth>
-    <users>
-        <user>
-            <id>1</id>
-            <username>vader</username>
-            <first_name>Anakin</first_name>
-            <last_name>Skywalker</last_name>
-            <email>vader@sith.org</email>
-        </user>
-        <user>
-            <id>2</id>
-            <username>kenobi</username>
-            <first_name>Obi-Wan</first_name>
-            <last_name>Kenobi</last_name>
-            <email>kenobi@jedi.org</email>
-        </user>
-    </users>
-    <groups>
-        <group>
-            <id>1</id>
-            <name>Sith</name>
-        </group>
-        <group>
-            <id>2</id>
-            <name>Jedi</name>
-        </group>
-    </groups>
-</auth>
-"""
+TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 
-XML_DUMMY_2 = """<?xml version="1.0" ?>
-<auth>
-    <users>
-        <user>
-            <id>1</id>
-            <username>tyranus</username>
-            <first_name>Count</first_name>
-            <last_name>Dooku</last_name>
-            <email>tyranus@sith.org</email>
-        </user>
-    </users>
-    <groups>
-        <group>
-            <id>1</id>
-            <name>Sith</name>
-        </group>
-        <group>
-            <id>2</id>
-            <name>Jedi</name>
-        </group>
-    </groups>
-</auth>
-"""
 
 class Thing(models.Model):
     "Dummy model for testing."
@@ -77,7 +26,7 @@ class FeedMapperTests(TestCase):
 
     def setUp(self):
         self.mapping = Mapping.objects.get(pk=1)
-        self.mapping.source = StringIO(XML_DUMMY)
+        self.mapping.source = os.path.join(TEST_DIR, "dummy1.xml")
         self.mapping.parse()
         self.parser = XMLParser(self.mapping)
 
@@ -113,7 +62,7 @@ class FeedMapperTests(TestCase):
     def test_parser_overwrites_items(self):
         "Ensure the parser overwrites items when sync type is set to OVERWRITE."
         num_things_before = Thing.objects.count()
-        self.mapping.source = StringIO(XML_DUMMY_2)
+        self.mapping.source = os.path.join(TEST_DIR, "dummy2.xml")
         self.mapping.overwrite = True
         self.mapping.parse()
         num_things_after = Thing.objects.count()
@@ -123,7 +72,7 @@ class FeedMapperTests(TestCase):
     def test_parser_updates_items(self):
         "Ensure the parser updates items when sync type is set to UPDATE."
         num_things_before = Thing.objects.count()
-        self.mapping.source = StringIO(XML_DUMMY_2)
+        self.mapping.source = os.path.join(TEST_DIR, "dummy2.xml")
         self.mapping.parse()
         num_things_after = Thing.objects.count()
         self.assertEqual(num_things_before, num_things_after)
@@ -137,3 +86,4 @@ class FeedMapperTests(TestCase):
 
     def tearDown(self):
         pass
+
