@@ -78,7 +78,8 @@ class FeedMapperTests(TestCase):
 
     def test_parser_one_to_many(self):
         "Ensure the parser can handle a one-to-many model field to feed nodes mapping."
-        pass
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.combined, "vader@sith.org Anakin Skywalker")
 
     def test_parser_one_to_transformer(self):
         "Ensure the parser can handle a custom transformer for a model field."
