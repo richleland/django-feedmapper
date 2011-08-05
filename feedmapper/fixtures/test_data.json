@@ -25,5 +25,27 @@
             "overwrite": false, 
             "label": "Rich Testing"
         }
+    },
+    {
+        "pk": 2, 
+        "model": "feedmapper.mapping", 
+        "fields": {
+            "source": "REPLACED IN TESTS", 
+            "parser": "feedmapper.parsers.AtomParser", 
+            "data_map": {
+                "models": {
+                    "feedmapper.AtomEntry": {
+                        "fields": {
+                            "atom_id": "atom:id",
+                            "title": "atom:title"
+                        },
+                        "identifier": "atom:id",
+                        "nodePath": "atom:entry"
+                    }
+                }
+            }, 
+            "overwrite": false, 
+            "label": "Rich Testing"
+        }
     }
 ]

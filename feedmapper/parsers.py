@@ -7,6 +7,7 @@ class Parser(object):
     "Base paarser class for mapping Django model fields to feed nodes."
     def __init__(self, mapping):
         self.mapping = mapping
+        self.nsmap = {}
 
     def validate_model_format(self, model_string):
         "Validate that a model in the JSON mapping are in the format app.model."
@@ -23,7 +24,7 @@ class XMLParser(Parser):
 
     def join_fields(self, node, fields):
         "Joins the text for the specified fields."
-        values = [node.find(field).text for field in fields]
+        values = [node.find(field, namespaces=self.nsmap).text for field in fields]
         return " ".join(values)
 
     def parse(self):
@@ -48,7 +49,7 @@ class XMLParser(Parser):
             identifier = configuration.get('identifier')
             node_path = configuration['nodePath'].replace('.', '/')
             fields = configuration['fields']
-            nodes = root.xpath(node_path)
+            nodes = root.xpath(node_path, namespaces=self.nsmap)
 
             if self.mapping.overwrite:
                 # remove existing items
@@ -58,7 +59,7 @@ class XMLParser(Parser):
             for node in nodes:
                 if not self.mapping.overwrite:
                     # overwrite is turned off, retrieve an existing instance
-                    identifier_value = node.find(identifier).text
+                    identifier_value = node.find(identifier, namespaces=self.nsmap).text
                     try:
                         instance = model.objects.get(pk=identifier_value)
                     except model.DoesNotExist:
@@ -69,15 +70,21 @@ class XMLParser(Parser):
                     if field != identifier:
                         if isinstance(target, basestring):
                             # maps one model field to one feed node
-                            value = node.find(target).text
+                            value = node.find(target, namespaces=self.nsmap).text
                         elif isinstance(target, list):
                             # maps one model field to multiple feed nodes
                             value = self.join_fields(node, target)
                         elif isinstance(target, dict):
                             # maps one model field to a transformer method
                             transformer = getattr(instance, target['transformer'])
-                            text_list = [node.find(target_field).text for target_field in target['fields']]
+                            text_list = [node.find(target_field, namespaces=self.nsmap).text for target_field in target['fields']]
                             value = transformer(*text_list)
                         setattr(instance, field, value)
                 instance.save()
+
+
+class AtomParser(XMLParser):
+    def __init__(self, mapping):
+        super(AtomParser, self).__init__(mapping)
+        self.nsmap = {'atom': 'http://www.w3.org/2005/Atom'}
 

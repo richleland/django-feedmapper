@@ -11,6 +11,13 @@ from feedmapper.parsers import XMLParser
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
+class AtomEntry(models.Model):
+    "Dummy model for testing an Atom feed."
+    atom_id = models.CharField(max_length=255, primary_key=True)
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255)
+
+
 class Thing(models.Model):
     "Dummy model for testing."
     email = models.EmailField()
@@ -29,6 +36,10 @@ class FeedMapperTests(TestCase):
         self.mapping.source = os.path.join(TEST_DIR, "dummy1.xml")
         self.mapping.parse()
         self.parser = XMLParser(self.mapping)
+
+        self.atom_mapping = Mapping.objects.get(pk=2)
+        self.atom_mapping.source = os.path.join(TEST_DIR, "atom.xml")
+        self.atom_mapping.parse()
 
     def test_model_format_validation_passes(self):
         "Ensure that validation passes if JSON mapping models are formatted properly."
