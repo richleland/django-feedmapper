@@ -22,7 +22,7 @@
                     }
                 }
             }, 
-            "overwrite": false, 
+            "purge": false, 
             "label": "Rich Testing"
         }
     },
@@ -44,7 +44,7 @@
                     }
                 }
             }, 
-            "overwrite": false, 
+            "purge": false, 
             "label": "Rich Testing"
         }
     }

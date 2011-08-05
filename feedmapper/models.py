@@ -13,7 +13,7 @@ class Mapping(models.Model):
     label = models.CharField(_("label"), max_length=255, help_text=_("Label for your reference"))
     source = models.URLField(_("source"), verify_exists=False, help_text=_("The source feed for your data"))
     parser = models.CharField(_("parser"), max_length=255, choices=PARSER_CHOICES, help_text=_("Which parser to use when synchronizing"))
-    overwrite = models.BooleanField(_("overwrite"), default=False, help_text=_("Overwrite items on sync?"))
+    purge = models.BooleanField(_("purge"), default=False, help_text=_("Purge existing items on sync?"))
     data_map = jsonfield.JSONField(_("data map"))
     # to add: schedule for synchronization, notification emails?
 

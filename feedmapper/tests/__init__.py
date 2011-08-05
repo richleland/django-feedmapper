@@ -70,18 +70,18 @@ class FeedMapperTests(TestCase):
         thing = Thing.objects.get(pk=1)
         self.assertEqual(thing.name, "Anakin Skywalker")
 
-    def test_parser_overwrites_items(self):
-        "Ensure the parser overwrites items when sync type is set to OVERWRITE."
+    def test_parser_purges_items(self):
+        "Ensure the parser purges items when purging is enabled."
         num_things_before = Thing.objects.count()
         self.mapping.source = os.path.join(TEST_DIR, "dummy2.xml")
-        self.mapping.overwrite = True
+        self.mapping.purge = True
         self.mapping.parse()
         num_things_after = Thing.objects.count()
         self.assertEqual(num_things_before, 2)
         self.assertEqual(num_things_after, 1)
 
     def test_parser_updates_items(self):
-        "Ensure the parser updates items when sync type is set to UPDATE."
+        "Ensure the parser updates items when purging is disabled."
         num_things_before = Thing.objects.count()
         self.mapping.source = os.path.join(TEST_DIR, "dummy2.xml")
         self.mapping.parse()

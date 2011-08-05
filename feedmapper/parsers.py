@@ -51,21 +51,20 @@ class XMLParser(Parser):
             fields = configuration['fields']
             nodes = root.xpath(node_path, namespaces=self.nsmap)
 
-            if self.mapping.overwrite:
+            if self.mapping.purge:
                 # remove existing items
-                for instance in model.objects.all():
-                    instance.delete()
+                model.objects.all().delete()
 
             for node in nodes:
-                if not self.mapping.overwrite:
-                    # overwrite is turned off, retrieve an existing instance
+                if self.mapping.purge:
+                    instance = model()
+                else:
+                    # purge is turned off, retrieve an existing instance
                     identifier_value = node.find(identifier, namespaces=self.nsmap).text
                     try:
                         instance = model.objects.get(pk=identifier_value)
                     except model.DoesNotExist:
                         instance = model()
-                else:
-                    instance = model()
                 for field, target in fields.items():
                     if field != identifier:
                         if isinstance(target, basestring):
