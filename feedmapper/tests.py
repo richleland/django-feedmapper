@@ -38,6 +38,30 @@ XML_DUMMY = """<?xml version="1.0" ?>
 </auth>
 """
 
+XML_DUMMY_2 = """<?xml version="1.0" ?>
+<auth>
+    <users>
+        <user>
+            <id>1</id>
+            <username>tyranus</username>
+            <first_name>Count</first_name>
+            <last_name>Dooku</last_name>
+            <email>tyranus@sith.org</email>
+        </user>
+    </users>
+    <groups>
+        <group>
+            <id>1</id>
+            <name>Sith</name>
+        </group>
+        <group>
+            <id>2</id>
+            <name>Jedi</name>
+        </group>
+    </groups>
+</auth>
+"""
+
 class Thing(models.Model):
     "Dummy model for testing."
     email = models.EmailField()
@@ -92,7 +116,11 @@ class FeedMapperTests(TestCase):
 
     def test_parser_updates_items(self):
         "Ensure the parser updates items when sync type is set to UPDATE."
-        pass
+        num_things_before = Thing.objects.count()
+        self.mapping.source = StringIO(XML_DUMMY_2)
+        self.mapping.parse()
+        num_things_after = Thing.objects.count()
+        self.assertEqual(num_things_before, num_things_after)
 
     def test_parser_update_impossible(self):
         """
