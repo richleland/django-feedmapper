@@ -83,7 +83,8 @@ class FeedMapperTests(TestCase):
 
     def test_parser_one_to_transformer(self):
         "Ensure the parser can handle a custom transformer for a model field."
-        pass
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.name, "Anakin Skywalker")
 
     def test_parser_overwrites_items(self):
         "Ensure the parser overwrites items when sync type is set to OVERWRITE."

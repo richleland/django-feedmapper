@@ -62,7 +62,7 @@ class XMLParser(Parser):
                         elif isinstance(target, dict):
                             # maps one model field to a transformer method
                             transformer = getattr(instance, target['transformer'])
-                            text_list = [node.find(field).text for field in target['fields']]
+                            text_list = [node.find(target_field).text for target_field in target['fields']]
                             value = transformer(*text_list)
                         setattr(instance, field, value)
                 instance.save()

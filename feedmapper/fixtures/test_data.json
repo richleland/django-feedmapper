@@ -7,17 +7,6 @@
             "parser": "feedmapper.parsers.XMLParser", 
             "data_map": {
                 "models": {
-                    "auth.User": {
-                        "fields": {
-                            "id": "id",
-                            "username": "username", 
-                            "email": "email", 
-                            "first_name": "first_name",
-                            "last_name": "last_name"
-                        }, 
-                        "identifier": "id",
-                        "nodePath": "users.user"
-                    },
                     "feedmapper.Thing": {
                         "fields": {
                             "id": "id",
@@ -30,14 +19,6 @@
                         },
                         "identifier": "id",
                         "nodePath": "users.user"
-                    },
-                    "auth.Group": {
-                        "fields": {
-                            "id": "id",
-                            "name": "name"
-                        }, 
-                        "identifier": "id",
-                        "nodePath": "groups.group"
                     }
                 }
             }, 
