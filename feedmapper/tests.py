@@ -1,9 +1,38 @@
+from StringIO import StringIO
+
 from django.db import models
 from django.test import TestCase
 
 from .models import Mapping
 from .parsers import XMLParser
 
+
+XML_DUMMY = """<?xml version="1.0" ?>
+<auth>
+    <users>
+        <user>
+            <id>2</id>
+            <username>richleland</username>
+            <first_name>Rich</first_name>
+            <last_name>Leland</last_name>
+            <email>rleland@ngs.org</email>
+        </user>
+        <user>
+            <id>3</id>
+            <username>jtk</username>
+            <first_name>Captain</first_name>
+            <last_name>Kirk</last_name>
+            <email>jkirk@enterprise.org</email>
+        </user>
+    </users>
+    <groups>
+        <group>
+            <id>2</id>
+            <name>Cool people</name>
+        </group>
+    </groups>
+</auth>
+"""
 
 class Thing(models.Model):
     "Dummy model for testing."
@@ -20,6 +49,7 @@ class FeedMapperTests(TestCase):
 
     def setUp(self):
         self.mapping = Mapping.objects.get(pk=1)
+        self.mapping.source = StringIO(XML_DUMMY)
         self.mapping.parse()
         self.parser = XMLParser(self.mapping)
 

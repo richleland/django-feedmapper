@@ -1,35 +1,7 @@
 from lxml import etree
-from StringIO import StringIO
 
 from django.db.models import get_model
 
-
-XML_DUMMY = """<?xml version="1.0" ?>
-<auth>
-    <users>
-        <user>
-            <id>2</id>
-            <username>richleland</username>
-            <first_name>Rich</first_name>
-            <last_name>Leland</last_name>
-            <email>rleland@ngs.org</email>
-        </user>
-        <user>
-            <id>3</id>
-            <username>jtk</username>
-            <first_name>Captain</first_name>
-            <last_name>Kirk</last_name>
-            <email>jkirk@enterprise.org</email>
-        </user>
-    </users>
-    <groups>
-        <group>
-            <id>2</id>
-            <name>Cool people</name>
-        </group>
-    </groups>
-</auth>
-"""
 
 class Parser(object):
     "Base paarser class for mapping Django model fields to feed nodes."
@@ -65,7 +37,7 @@ class XMLParser(Parser):
             instance.save()
         """
         # this will change to etree.parse(mapping.data_url)
-        tree = etree.parse(StringIO(XML_DUMMY))
+        tree = etree.parse(self.mapping.source)
         root = tree.getroot()
 
         model_mappings = self.mapping.data_map['models']
