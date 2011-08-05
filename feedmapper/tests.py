@@ -112,7 +112,13 @@ class FeedMapperTests(TestCase):
 
     def test_parser_overwrites_items(self):
         "Ensure the parser overwrites items when sync type is set to OVERWRITE."
-        pass
+        num_things_before = Thing.objects.count()
+        self.mapping.source = StringIO(XML_DUMMY_2)
+        self.mapping.overwrite = True
+        self.mapping.parse()
+        num_things_after = Thing.objects.count()
+        self.assertEqual(num_things_before, 2)
+        self.assertEqual(num_things_after, 1)
 
     def test_parser_updates_items(self):
         "Ensure the parser updates items when sync type is set to UPDATE."
