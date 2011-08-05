@@ -23,11 +23,31 @@
                 }
             }, 
             "purge": false, 
-            "label": "Rich Testing"
+            "label": "Clean mapping"
         }
     },
     {
         "pk": 2, 
+        "model": "feedmapper.mapping", 
+        "fields": {
+            "source": "REPLACED IN TESTS", 
+            "parser": "feedmapper.parsers.XMLParser", 
+            "data_map": {
+                "models": {
+                    "feedmapper.Thing": {
+                        "fields": {
+                            "email": "email"
+                        },
+                        "nodePath": "users.user"
+                    }
+                }
+            }, 
+            "purge": false, 
+            "label": "Exception raising mapping"
+        }
+    },
+    {
+        "pk": 3, 
         "model": "feedmapper.mapping", 
         "fields": {
             "source": "REPLACED IN TESTS", 

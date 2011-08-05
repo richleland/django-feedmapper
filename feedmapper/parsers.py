@@ -37,7 +37,6 @@ class XMLParser(Parser):
                 instance[model_field] = mapped_to # lots of magic in mapped_to
             instance.save()
         """
-        # this will change to etree.parse(mapping.data_url)
         tree = etree.parse(self.mapping.source)
         root = tree.getroot()
 
@@ -45,8 +44,10 @@ class XMLParser(Parser):
         for model_string, configuration in model_mappings.items():
             if not self.validate_model_format(model_string):
                 raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
-            model = get_model(*model_string.split('.'))
             identifier = configuration.get('identifier')
+            if not identifier and not self.mapping.purge:
+                raise UserWarning("bleh")
+            model = get_model(*model_string.split('.'))
             node_path = configuration['nodePath'].replace('.', '/')
             fields = configuration['fields']
             nodes = root.xpath(node_path, namespaces=self.nsmap)

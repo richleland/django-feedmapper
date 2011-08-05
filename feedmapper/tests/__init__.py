@@ -37,7 +37,7 @@ class FeedMapperTests(TestCase):
         self.mapping.parse()
         self.parser = XMLParser(self.mapping)
 
-        self.atom_mapping = Mapping.objects.get(pk=2)
+        self.atom_mapping = Mapping.objects.get(pk=3)
         self.atom_mapping.source = os.path.join(TEST_DIR, "atom.xml")
         self.atom_mapping.parse()
 
@@ -89,11 +89,10 @@ class FeedMapperTests(TestCase):
         self.assertEqual(num_things_before, num_things_after)
 
     def test_parser_update_impossible(self):
-        """
-        Ensure that if the identifier isn't specified in a mapping and sync type is
-        set to UPDATE the parsing is aborted.
-        """
-        pass
+        "Ensure that a mapping without identifiers and purge turned off fails."
+        mapping = Mapping.objects.get(pk=2)
+        mapping.source = os.path.join(TEST_DIR, "exceptions.xml")
+        self.assertRaises(UserWarning, mapping.parse)
 
     def tearDown(self):
         pass
