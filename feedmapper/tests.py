@@ -11,24 +11,28 @@ XML_DUMMY = """<?xml version="1.0" ?>
 <auth>
     <users>
         <user>
-            <id>2</id>
-            <username>richleland</username>
-            <first_name>Rich</first_name>
-            <last_name>Leland</last_name>
-            <email>rleland@ngs.org</email>
+            <id>1</id>
+            <username>vader</username>
+            <first_name>Anakin</first_name>
+            <last_name>Skywalker</last_name>
+            <email>vader@sith.org</email>
         </user>
         <user>
-            <id>3</id>
-            <username>jtk</username>
-            <first_name>Captain</first_name>
-            <last_name>Kirk</last_name>
-            <email>jkirk@enterprise.org</email>
+            <id>2</id>
+            <username>kenobi</username>
+            <first_name>Obi-Wan</first_name>
+            <last_name>Kenobi</last_name>
+            <email>kenobi@jedi.org</email>
         </user>
     </users>
     <groups>
         <group>
+            <id>1</id>
+            <name>Sith</name>
+        </group>
+        <group>
             <id>2</id>
-            <name>Cool people</name>
+            <name>Jedi</name>
         </group>
     </groups>
 </auth>
@@ -65,7 +69,8 @@ class FeedMapperTests(TestCase):
 
     def test_parser_one_to_one(self):
         "Ensure the parser can handle a one-to-one model field to feed node mapping."
-        pass
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.email, "vader@sith.org")
 
     def test_parser_one_to_attribute(self):
         "Ensure the parser can handle a model field to feed node attribute mapping."
