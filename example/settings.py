@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'feedmapper',
+    'example.myapp',
 )
 
 # A sample logging configuration. The only tangible logging
