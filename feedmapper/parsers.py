@@ -4,13 +4,14 @@ from django.db.models import get_model
 
 
 class Parser(object):
-    "Base paarser class for mapping Django model fields to feed nodes."
+    "Base parser class for mapping Django model fields to feed nodes."
+
     def __init__(self, mapping):
         self.mapping = mapping
         self.nsmap = {}
 
     def validate_model_format(self, model_string):
-        "Validate that a model in the JSON mapping are in the format app.model."
+        "Validate that a model in the JSON mapping is in the format app.model."
         if not '.' in model_string or model_string.count('.') > 1:
             return False
         return True
@@ -29,13 +30,8 @@ class XMLParser(Parser):
 
     def parse(self):
         """
-        PSEUDOCODE
-        for model in models:
-            instance = model()
-            field_mappings = model['fields'] # dict
-            for model_field, mapped_to in field_mappings.items():
-                instance[model_field] = mapped_to # lots of magic in mapped_to
-            instance.save()
+        Traverses through the XML document and parses the data, applying it to the
+        model specified in the :py:class:`~feedmapper.models.Mapping`.
         """
         tree = etree.parse(self.mapping.source)
         root = tree.getroot()
@@ -46,7 +42,7 @@ class XMLParser(Parser):
                 raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
             identifier = configuration.get('identifier')
             if not identifier and not self.mapping.purge:
-                raise UserWarning("bleh")
+                raise UserWarning("Purging is off and the JSON mapping doesn't supply an identifier.")
             model = get_model(*model_string.split('.'))
             node_path = configuration['nodePath'].replace('.', '/')
             fields = configuration['fields']
@@ -84,6 +80,8 @@ class XMLParser(Parser):
 
 
 class AtomParser(XMLParser):
+    "An XML parser for the Atom standard."
+
     def __init__(self, mapping):
         super(AtomParser, self).__init__(mapping)
         self.nsmap = {'atom': 'http://www.w3.org/2005/Atom'}
