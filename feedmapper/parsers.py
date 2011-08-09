@@ -32,7 +32,7 @@ class XMLParser(Parser):
             resolved = node.find(path, namespaces=self.nsmap).attrib.get(attr, "")
         else:
             resolved = node.find(path, namespaces=self.nsmap).text
-        return resolved
+        return resolved.strip()
 
     def join_fields(self, node, fields):
         "Joins the text for the specified fields."
