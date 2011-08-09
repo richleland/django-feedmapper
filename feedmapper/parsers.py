@@ -31,7 +31,7 @@ class XMLParser(Parser):
             path, attr = path.rsplit('.@')
             resolved = node.find(path, namespaces=self.nsmap).attrib.get(attr, "")
         else:
-            resolved = node.find(path, namespaces=self.nsmap).text
+            resolved = node.find(path, namespaces=self.nsmap).text or ""
         return resolved.strip()
 
     def join_fields(self, node, fields):

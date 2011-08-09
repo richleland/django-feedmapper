@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from feedmapper.models import Mapping
 
@@ -11,5 +11,8 @@ class Command(BaseCommand):
         mappings = Mapping.objects.all()
         if args:
             mappings = mappings.filter(id__in=args)
-        for mapping in mappings:
-            mapping.parse()
+        if mappings:
+            for mapping in mappings:
+                mapping.parse()
+        else:
+            self.stdout.write("No mappings to parse.\n")
