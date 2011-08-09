@@ -95,6 +95,17 @@ class FeedMapperTests(TestCase):
         mapping.source = os.path.join(TEST_DIR, "exceptions.xml")
         self.assertRaises(UserWarning, mapping.parse)
 
+    def test_parser_handles_local_files(self):
+        "Ensure that the parser can handle a local filesystem data source."
+        mapping = Mapping.objects.get(pk=1)
+        mapping.source = "dummy1.xml"
+        mapping.parse()
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.name, "Anakin Skywalker")
+        self.assertEqual(thing.nick, "zeke")
+        self.assertEqual(thing.email, "vader@sith.org")
+        self.assertEqual(thing.combined, "vader@sith.org Anakin Skywalker")
+
     def tearDown(self):
         pass
 

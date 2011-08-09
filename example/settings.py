@@ -149,3 +149,7 @@ LOGGING = {
         },
     }
 }
+
+FEEDMAPPER = {
+    'DATA_DIR': os.path.abspath(os.path.join(PROJECT_ROOT, '../feedmapper/tests/'))
+}
