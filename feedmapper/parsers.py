@@ -65,8 +65,13 @@ class XMLParser(Parser):
                 for field, target in fields.items():
                     if field != identifier:
                         if isinstance(target, basestring):
-                            # maps one model field to one feed node
-                            value = node.find(target, namespaces=self.nsmap).text
+                            if "@" in target:
+                                # maps one model field to one feed node's attribute
+                                element, attribute = target.split('.@')
+                                value = node.find(element, namespaces=self.nsmap).attrib.get(attribute, "")
+                            else:
+                                # maps one model field to one feed node
+                                value = node.find(target, namespaces=self.nsmap).text
                         elif isinstance(target, list):
                             # maps one model field to multiple feed nodes
                             value = self.join_fields(node, target)

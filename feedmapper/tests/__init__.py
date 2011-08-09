@@ -21,6 +21,7 @@ class Thing(models.Model):
     "Dummy model for testing."
     email = models.EmailField()
     name = models.CharField(max_length=255)
+    nick = models.CharField(max_length=50)
     combined = models.TextField()
 
     def convert_name(self, first_name, last_name):
@@ -57,7 +58,8 @@ class FeedMapperTests(TestCase):
 
     def test_parser_one_to_attribute(self):
         "Ensure the parser can handle a model field to feed node attribute mapping."
-        pass
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.nick, "zeke")
 
     def test_parser_one_to_many(self):
         "Ensure the parser can handle a one-to-many model field to feed nodes mapping."

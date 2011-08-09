@@ -12,6 +12,7 @@
                             "id": "id",
                             "combined": ["email", "first_name", "last_name"],
                             "email": "email", 
+                            "nick": "username.@nick", 
                             "name": {
                               "transformer": "convert_name",
                               "fields": ["first_name", "last_name"]

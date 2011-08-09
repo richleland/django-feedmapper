@@ -3,7 +3,7 @@
     <users>
         <user>
             <id>1</id>
-            <username>vader</username>
+            <username nick="zeke">vader</username>
             <first_name>Anakin</first_name>
             <last_name>Skywalker</last_name>
             <email>vader@sith.org</email>
