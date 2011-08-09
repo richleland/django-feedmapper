@@ -23,9 +23,20 @@ class Parser(object):
 class XMLParser(Parser):
     "A parser for XML that does not follow any standard."
 
+    def get_value(self, node, path):
+        "Attempts to retrieve either the node text or node attribute specified."
+        if '@' in path:
+            if path.count('@') > 1:
+                raise ValueError("You have more than one attribute accessor. (e.g. foo.@bar.@baz)")
+            path, attr = path.rsplit('.@')
+            resolved = node.find(path, namespaces=self.nsmap).attrib.get(attr, "")
+        else:
+            resolved = node.find(path, namespaces=self.nsmap).text
+        return resolved
+
     def join_fields(self, node, fields):
         "Joins the text for the specified fields."
-        values = [node.find(field, namespaces=self.nsmap).text for field in fields]
+        values = [self.get_value(node, field) for field in fields]
         return " ".join(values)
 
     def parse(self):
@@ -65,20 +76,15 @@ class XMLParser(Parser):
                 for field, target in fields.items():
                     if field != identifier:
                         if isinstance(target, basestring):
-                            if "@" in target:
-                                # maps one model field to one feed node's attribute
-                                element, attribute = target.split('.@')
-                                value = node.find(element, namespaces=self.nsmap).attrib.get(attribute, "")
-                            else:
-                                # maps one model field to one feed node
-                                value = node.find(target, namespaces=self.nsmap).text
+                            # maps one model field to one feed node
+                            value = self.get_value(node, target)
                         elif isinstance(target, list):
                             # maps one model field to multiple feed nodes
                             value = self.join_fields(node, target)
                         elif isinstance(target, dict):
                             # maps one model field to a transformer method
                             transformer = getattr(instance, target['transformer'])
-                            text_list = [node.find(target_field, namespaces=self.nsmap).text for target_field in target['fields']]
+                            text_list = [self.get_value(node, target_field) for target_field in target['fields']]
                             value = transformer(*text_list)
                         setattr(instance, field, value)
                 instance.save()
