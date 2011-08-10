@@ -16,7 +16,7 @@ Make sure you have `virtualenvwrapper`_ installed and create a virtual environme
     mkvirtualenv --no-site-packages --distribute django-feedmapper
     workon django-feedmapper/example/
 
-.. _virtualenvwraper: http://www.doughellmann.com/docs/virtualenvwrapper/
+.. _virtualenvwrapper: http://www.doughellmann.com/docs/virtualenvwrapper/
 
 Install the requirements::
     
