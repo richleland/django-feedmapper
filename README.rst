@@ -9,12 +9,12 @@ Example project
 Clone this git repo::
 
     git clone git@github.com:natgeo/django-feedmapper.git
-    cd django-feedmapper
+    cd django-feedmapper/example/
 
 Make sure you have `virtualenvwrapper`_ installed and create a virtual environment::
 
     mkvirtualenv --no-site-packages --distribute django-feedmapper
-    workon django-feedmapper/example/
+    workon django-feedmapper
 
 .. _virtualenvwrapper: http://www.doughellmann.com/docs/virtualenvwrapper/
 
