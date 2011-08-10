@@ -16,7 +16,7 @@ class Parser(object):
 
     @property
     def data_source(self):
-        if not self.mapping.source.startswith('/') or not '://' in self.mapping.source:
+        if not self.mapping.source.startswith('/') and not '://' in self.mapping.source:
             return os.path.join(self.data_dir, self.mapping.source)
             return os.path.join(self.data_dir, self.mapping.source)
         return self.mapping.source

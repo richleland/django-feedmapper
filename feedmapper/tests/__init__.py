@@ -106,6 +106,13 @@ class FeedMapperTests(TestCase):
         self.assertEqual(thing.email, "vader@sith.org")
         self.assertEqual(thing.combined, "vader@sith.org Anakin Skywalker")
 
+    def test_parser_handles_urls(self):
+        "Ensure that the parser can handle a remote data source URL."
+        mapping = Mapping.objects.get(pk=1)
+        mapping.source = "http://example.com/data.xml"
+        parser = XMLParser(mapping)
+        self.assertEqual(parser.data_source, mapping.source)
+
     def tearDown(self):
         pass
 
