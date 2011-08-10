@@ -9,7 +9,7 @@ Example project
 Clone this git repo::
 
     git clone git@github.com:natgeo/django-feedmapper.git
-    cd django-feedmapper/example/
+    cd django-feedmapper
 
 Make sure you have `virtualenvwrapper`_ installed and create a virtual environment::
 
@@ -24,6 +24,7 @@ Install the requirements::
 
 Synchronize the database::
 
+    cd example
     ./manage.py syncdb
 
 Load up some dummy data::
