@@ -1,0 +1,3 @@
+Parsing of the mapping "{{ mapping.label }}" failed on {{ parse_attempted|date:"F j, Y" }} at {{ parse_attempted|date:"h:i A T" }}. Below is a log containing the details of the failure:
+
+{{ parse_log|safe }}

@@ -2,7 +2,10 @@ import os
 from datetime import datetime
 from lxml import etree
 
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db.models import get_model
+from django.template.loader import render_to_string
 
 from .settings import FEEDMAPPER
 
@@ -26,6 +29,18 @@ class Parser(object):
         if not '.' in model_string or model_string.count('.') > 1:
             return False
         return True
+
+    def notify_failure(self, subject=None):
+        "Notify recipients, if specified, of an error during parsing."
+        if not subject:
+            subject = "django-feedmapper parsing failure notice"
+        message = render_to_string('feedmapper/notify_failure.txt', {
+            'mapping': self.mapping,
+            'parse_attempted': self.mapping.parse_attempted,
+            'parse_log': self.mapping.parse_log
+        })
+        recipients = self.mapping.notification_recipients.split('\r\n')
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, recipients)
 
     def parse(self):
         raise NotImplementedError("You must override the parse method in a Parser subclass.")
@@ -111,6 +126,10 @@ class XMLParser(Parser):
         # clear the lxml error log so errors don't compound
         etree.clear_error_log()
         self.mapping.save()
+
+        # notify the authorities if a failure occured
+        if not self.mapping.parse_succeeded:
+            self.notify_failure()
 
 
 class AtomParser(XMLParser):

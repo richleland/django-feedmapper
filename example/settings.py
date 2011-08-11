@@ -150,6 +150,8 @@ LOGGING = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 FEEDMAPPER = {
     'DATA_DIR': os.path.abspath(os.path.join(PROJECT_ROOT, '../feedmapper/tests/'))
 }

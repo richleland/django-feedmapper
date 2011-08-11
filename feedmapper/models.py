@@ -13,6 +13,7 @@ class Mapping(models.Model):
     parser = models.CharField(_("parser"), max_length=255, choices=FEEDMAPPER['PARSER_CHOICES'], help_text=_("Which parser to use when synchronizing"))
     purge = models.BooleanField(_("purge"), default=False, help_text=_("Purge existing items on sync?"))
     data_map = jsonfield.JSONField(_("data map"))
+    notification_recipients = models.TextField(_("notification recipients"), blank=True, help_text=_("Specify one email address per line to be notified of parsing errors."))
     parse_attempted = models.DateTimeField(_("parse attempted"), blank=True, null=True)
     parse_succeeded = models.BooleanField(_("parse succeeded"))
     parse_log = models.TextField(_("parse log"), blank=True)

@@ -9,7 +9,8 @@ class MappingAdmin(admin.ModelAdmin):
             'fields': ('label', 'source', 'parser', 'purge', 'data_map')
         }),
         ("Parsing results", {
-            'fields': ('parse_attempted', 'parse_succeeded', 'parse_log')
+            'fields': ('notification_recipients', 'parse_attempted',
+                       'parse_succeeded', 'parse_log')
         })
     )
     list_display = ('label', 'parser', 'purge', 'parse_attempted', 'parse_succeeded')
