@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from lxml import etree
 
 from django.db.models import get_model
@@ -17,7 +18,6 @@ class Parser(object):
     @property
     def data_source(self):
         if not self.mapping.source.startswith('/') and not '://' in self.mapping.source:
-            return os.path.join(self.data_dir, self.mapping.source)
             return os.path.join(self.data_dir, self.mapping.source)
         return self.mapping.source
 
@@ -55,50 +55,62 @@ class XMLParser(Parser):
         Traverses through the XML document and parses the data, applying it to the
         model specified in the :py:class:`~feedmapper.models.Mapping`.
         """
-        tree = etree.parse(self.data_source)
-        root = tree.getroot()
+        self.mapping.parse_attempted = datetime.now()
+        try:
+            tree = etree.parse(self.data_source)
+            root = tree.getroot()
 
-        model_mappings = self.mapping.data_map['models']
-        for model_string, configuration in model_mappings.items():
-            if not self.validate_model_format(model_string):
-                raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
-            identifier = configuration.get('identifier')
-            if not identifier and not self.mapping.purge:
-                raise UserWarning("Purging is off and the JSON mapping doesn't supply an identifier.")
-            model = get_model(*model_string.split('.'))
-            node_path = configuration['nodePath'].replace('.', '/')
-            fields = configuration['fields']
-            nodes = root.xpath(node_path, namespaces=self.nsmap)
+            model_mappings = self.mapping.data_map['models']
+            for model_string, configuration in model_mappings.items():
+                if not self.validate_model_format(model_string):
+                    raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
+                identifier = configuration.get('identifier')
+                if not identifier and not self.mapping.purge:
+                    raise UserWarning("Purging is off and the JSON mapping doesn't supply an identifier.")
+                model = get_model(*model_string.split('.'))
+                node_path = configuration['nodePath'].replace('.', '/')
+                fields = configuration['fields']
+                nodes = root.xpath(node_path, namespaces=self.nsmap)
 
-            if self.mapping.purge:
-                # remove existing items
-                model.objects.all().delete()
-
-            for node in nodes:
                 if self.mapping.purge:
-                    instance = model()
-                else:
-                    # purge is turned off, retrieve an existing instance
-                    identifier_value = node.find(identifier, namespaces=self.nsmap).text
-                    try:
-                        instance = model.objects.get(pk=identifier_value)
-                    except model.DoesNotExist:
+                    # remove existing items
+                    model.objects.all().delete()
+
+                for node in nodes:
+                    if self.mapping.purge:
                         instance = model()
-                for field, target in fields.items():
-                    if field != identifier:
-                        if isinstance(target, basestring):
-                            # maps one model field to one feed node
-                            value = self.get_value(node, target)
-                        elif isinstance(target, list):
-                            # maps one model field to multiple feed nodes
-                            value = self.join_fields(node, target)
-                        elif isinstance(target, dict):
-                            # maps one model field to a transformer method
-                            transformer = getattr(instance, target['transformer'])
-                            text_list = [self.get_value(node, target_field) for target_field in target['fields']]
-                            value = transformer(*text_list)
-                        setattr(instance, field, value)
-                instance.save()
+                    else:
+                        # purge is turned off, retrieve an existing instance
+                        identifier_value = node.find(identifier, namespaces=self.nsmap).text
+                        try:
+                            instance = model.objects.get(pk=identifier_value)
+                        except model.DoesNotExist:
+                            instance = model()
+                    for field, target in fields.items():
+                        if field != identifier:
+                            if isinstance(target, basestring):
+                                # maps one model field to one feed node
+                                value = self.get_value(node, target)
+                            elif isinstance(target, list):
+                                # maps one model field to multiple feed nodes
+                                value = self.join_fields(node, target)
+                            elif isinstance(target, dict):
+                                # maps one model field to a transformer method
+                                transformer = getattr(instance, target['transformer'])
+                                text_list = [self.get_value(node, target_field) for target_field in target['fields']]
+                                value = transformer(*text_list)
+                            setattr(instance, field, value)
+                    instance.save()
+            self.mapping.parse_succeeded = True
+        except etree.Error, e:
+            self.mapping.parse_succeeded = False
+            self.mapping.parse_log = str(e.error_log)
+        except IOError, e:
+            self.mapping.parse_succeeded = False
+            self.mapping.parse_log = e.message
+        # clear the lxml error log so errors don't compound
+        etree.clear_error_log()
+        self.mapping.save()
 
 
 class AtomParser(XMLParser):

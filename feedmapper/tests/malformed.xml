@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<auth>
+    <users>
+        <user>
+            <id>1</id>
+            <username nick=zeke>vader</username>
+            <first_name>Anakin</first_name>
+            <last_name>Skywalker</last_name>
+            <email>vader@sith.org</email>
+        <user>
+            <id>2</id>
+            <username>kenobi</username>
+            <first_name>Obi-Wan</first_name>
+            <last_name>Kenobi</last_name>
+            <email>kenobi@jedi.org</email>
+        </user>
+    </users>
+</auth>

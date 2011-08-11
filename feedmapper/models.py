@@ -13,7 +13,9 @@ class Mapping(models.Model):
     parser = models.CharField(_("parser"), max_length=255, choices=FEEDMAPPER['PARSER_CHOICES'], help_text=_("Which parser to use when synchronizing"))
     purge = models.BooleanField(_("purge"), default=False, help_text=_("Purge existing items on sync?"))
     data_map = jsonfield.JSONField(_("data map"))
-    # to add: schedule for synchronization, notification emails?
+    parse_attempted = models.DateTimeField(blank=True, null=True)
+    parse_succeeded = models.BooleanField()
+    parse_log = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.label

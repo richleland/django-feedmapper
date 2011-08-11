@@ -109,9 +109,23 @@ class FeedMapperTests(TestCase):
     def test_parser_handles_urls(self):
         "Ensure that the parser can handle a remote data source URL."
         mapping = Mapping.objects.get(pk=1)
-        mapping.source = "http://example.com/data.xml"
+        mapping.source = "http://a.com/notreal.xml"
         parser = XMLParser(mapping)
         self.assertEqual(parser.data_source, mapping.source)
+
+    def test_xml_syntax_exception(self):
+        mapping = Mapping.objects.get(pk=1)
+        mapping.source = os.path.join(TEST_DIR, "malformed.xml")
+        mapping.parse()
+        self.assertTrue("feedmapper/tests/malformed.xml:6:27:FATAL:PARSER:ERR_ATTRIBUTE_NOT_STARTED" in mapping.parse_log)
+        self.assertFalse(mapping.parse_succeeded)
+
+    def test_bad_url_exception(self):
+        mapping = Mapping.objects.get(pk=1)
+        mapping.source = "http://a.com/notreal.xml"
+        mapping.parse()
+        self.assertEqual(mapping.parse_log, u'Error reading file \'http://a.com/notreal.xml\': failed to load external entity "http://a.com/notreal.xml"')
+        self.assertFalse(mapping.parse_succeeded)
 
     def tearDown(self):
         pass
