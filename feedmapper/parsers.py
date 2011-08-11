@@ -128,7 +128,7 @@ class XMLParser(Parser):
         self.mapping.save()
 
         # notify the authorities if a failure occured
-        if not self.mapping.parse_succeeded:
+        if not self.mapping.parse_succeeded and self.mapping.notification_recipients:
             self.notify_failure()
 
 
