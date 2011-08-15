@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -28,3 +29,17 @@ class Mapping(models.Model):
         parser_class = getattr(module, parser_class)
         parser = parser_class(self)
         parser.parse()
+
+    if 'djcelery' in settings.INSTALLED_APPS:
+        def save(self, *args, **kwargs):
+            "Create or update a django-celery periodic task for this mapping."
+            super(Mapping, self).save(*args, **kwargs)
+            from djcelery.models import CrontabSchedule, PeriodicTask
+            crontab, created = CrontabSchedule.objects.get_or_create(minute='0', hour='*', day_of_week='*')
+            task = 'feedmapper.tasks.feedmapper_sync'
+            args = '[%s]' % self.id
+            task, created = PeriodicTask.objects.get_or_create(task=task, args=args)
+            task.name = self.label
+            if not (task.interval or task.crontab):
+                task.crontab = crontab
+            task.save()
