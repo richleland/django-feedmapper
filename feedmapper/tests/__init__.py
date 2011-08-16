@@ -117,7 +117,7 @@ class FeedMapperTests(TestCase):
         mapping = Mapping.objects.get(pk=1)
         mapping.source = os.path.join(TEST_DIR, "malformed.xml")
         mapping.parse()
-        self.assertTrue("feedmapper/tests/malformed.xml:6:27:FATAL:PARSER:ERR_ATTRIBUTE_NOT_STARTED" in mapping.parse_log)
+        self.assertTrue("FATAL:PARSER:ERR_ATTRIBUTE_NOT_STARTED" in mapping.parse_log)
         self.assertFalse(mapping.parse_succeeded)
 
     def test_bad_url_exception(self):
