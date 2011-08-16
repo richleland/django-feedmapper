@@ -141,13 +141,39 @@ We've got example of all three types of field mappings here.
 Scheduling
 **********
 
-.. note:: DEV IS STILL IN PROGRESS FOR THIS. IT WILL CHANGE.
+There are two ways to schedule the synchonization of mappings.
 
-Mappings define when and what should be updated. The execution should be handled by `celery`_ workers. We need to have a way to create scheduled tasks dynamically. The `django-celery`_ library handles this using `custom scheduler classes`_.
+Using django-celery
+-------------------
 
-We may want to consider creating management commands to handle the synchronization as well that can be set up as cron jobs.
+The first scheduling method, and the preferred, is to use `django-celery`_. To take advantage of this scheduling method, take the following steps:
 
-.. _celery: http://celeryproject.org/
+1. Install django-celery. If you've never done this before, it can be a little complicated. You'll want to read through the `official docs`_. An example of some basic settings is in ``example/settings_celery.py``:
+
+.. literalinclude:: ../../example/settings_celery.py
+   :linenos:
+
+2. Make sure you enable the Django database scheduler of django-celery by adding the following to your ``settings.py`` file::
+
+    CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+Now every time you save a mapping, it will either create or update a matching django-celery PeriodicTask in the database. By default the periodic task will run once an hour. If you want to change this, visit the PeriodicTask in the Django admin (``/admin/djcelery/periodictask/`` by default) and modify the interval or crontab settings:
+
+.. image:: /_static/periodic-task.jpg
+
+
+Using feedmapper_sync
+---------------------
+
+Of course, not everyone has resources or need to use a message queue solution. The second scheduling method is by setting up a cron job and using the ``feedmapper_sync`` management command. Make sure you have the ``DJANGO_SETTINGS_MODULE`` environment variable set and add the following to your crontab::
+
+    * * * * * /full/path/to/bin/django-admin.py feedmapper_sync
+
+If you only want to sync a subset of the mappings you can supply one or more mapping IDs to the management command::
+
+    * * * * * /full/path/to/bin/django-admin.py feedmapper_sync 3 8 22
+
+.. _official docs: http://ask.github.com/django-celery/introduction.html#installation
 .. _django-celery: http://packages.python.org/django-celery/
 .. _custom scheduler classes: http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#using-custom-scheduler-classes
 
