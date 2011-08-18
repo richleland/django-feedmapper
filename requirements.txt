@@ -1,3 +1,2 @@
 Django>=1.2
 lxml==2.3
--e hg+https://bitbucket.org/schinckel/django-jsonfield@634bcc9694c915c54f58af70e2dd9f03e5c6bb8f#egg=django_jsonfield-dev

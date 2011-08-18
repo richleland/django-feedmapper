@@ -2,8 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-import jsonfield
-
+from .fields import JSONField
 from .settings import FEEDMAPPER
 
 
@@ -13,7 +12,7 @@ class Mapping(models.Model):
     source = models.URLField(_("source"), verify_exists=False, help_text=_("The source feed for your data"))
     parser = models.CharField(_("parser"), max_length=255, choices=FEEDMAPPER['PARSER_CHOICES'], help_text=_("Which parser to use when synchronizing"))
     purge = models.BooleanField(_("purge"), default=False, help_text=_("Purge existing items on sync?"))
-    data_map = jsonfield.JSONField(_("data map"))
+    data_map = JSONField(_("data map"))
     notification_recipients = models.TextField(_("notification recipients"), blank=True, help_text=_("Specify one email address per line to be notified of parsing errors."))
     parse_attempted = models.DateTimeField(_("parse attempted"), blank=True, null=True)
     parse_succeeded = models.BooleanField(_("parse succeeded"))
