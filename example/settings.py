@@ -14,6 +14,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# This is just for our tox tests, which run Django 1.1.x
+DATABASE_ENGINE = 'django.db.backends.sqlite3'
+DATABASE_NAME = 'dev.db'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
