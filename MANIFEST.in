@@ -1,0 +1,2 @@
+recursive-include feedmapper/fixtures *
+recursive-include feedmapper/tests *.xml
