@@ -9,7 +9,7 @@ from .settings import FEEDMAPPER
 class Mapping(models.Model):
     "Represents a mapping of model fields to feed nodes or attributes."
     label = models.CharField(_("label"), max_length=255, help_text=_("Label for your reference"))
-    source = models.URLField(_("source"), verify_exists=False, help_text=_("The source feed for your data"))
+    source = models.CharField(_("source"), max_length=255, help_text=_("The source feed for your data"))
     parser = models.CharField(_("parser"), max_length=255, choices=FEEDMAPPER['PARSER_CHOICES'], help_text=_("Which parser to use when synchronizing"))
     purge = models.BooleanField(_("purge"), default=False, help_text=_("Purge existing items on sync?"))
     data_map = JSONField(_("data map"))
