@@ -1,2 +1,4 @@
 recursive-include feedmapper/fixtures *
+recursive-include feedmapper/templates *
 recursive-include feedmapper/tests *.xml
+global-exclude *.un~
