@@ -127,6 +127,19 @@ class FeedMapperTests(TestCase):
         self.assertEqual(mapping.parse_log, u'Error reading file \'http://a.com/notreal.xml\': failed to load external entity "http://a.com/notreal.xml"')
         self.assertFalse(mapping.parse_succeeded)
 
+    def test_parse_log_clears(self):
+        "Ensure the parse log gets cleared out when parsing succeeds."
+        mapping = Mapping.objects.get(pk=1)
+        mapping.source = "http://a.com/notreal.xml"
+        mapping.parse()
+        self.assertNotEqual(mapping.parse_log, "")
+        self.assertFalse(mapping.parse_succeeded)
+        # now re-parse a good data source and see if the log is clear
+        mapping.source = "dummy1.xml"
+        mapping.parse()
+        self.assertEqual(mapping.parse_log, "")
+        self.assertTrue(mapping.parse_succeeded)
+
     def tearDown(self):
         pass
 

@@ -117,6 +117,7 @@ class XMLParser(Parser):
                             setattr(instance, field, value)
                     instance.save()
             self.mapping.parse_succeeded = True
+            self.mapping.parse_log = ""
         except etree.Error, e:
             self.mapping.parse_succeeded = False
             self.mapping.parse_log = str(e.error_log)
