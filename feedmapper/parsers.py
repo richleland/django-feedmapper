@@ -110,10 +110,15 @@ class XMLParser(Parser):
                                 # maps one model field to multiple feed nodes
                                 value = self.join_fields(node, target)
                             elif isinstance(target, dict):
-                                # maps one model field to a transformer method
-                                transformer = getattr(instance, target['transformer'])
-                                text_list = [self.get_value(node, target_field) for target_field in target['fields']]
-                                value = transformer(*text_list)
+                                value = None
+                                if 'transformer' in target:
+                                    # maps one model field to a transformer method
+                                    transformer = getattr(instance, target['transformer'])
+                                    text_list = [self.get_value(node, target_field) for target_field in target['fields']]
+                                    value = transformer(*text_list)
+                                if 'default' in target and not value:
+                                    # maps one model field to a default value
+                                    value = target['default']
                             setattr(instance, field, value)
                     instance.save()
             self.mapping.parse_succeeded = True

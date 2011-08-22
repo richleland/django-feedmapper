@@ -16,6 +16,9 @@
                             "name": {
                               "transformer": "convert_name",
                               "fields": ["first_name", "last_name"]
+                            },
+                            "other": {
+                              "default": "default value from mapping"
                             }
                         },
                         "identifier": "id",
