@@ -57,7 +57,11 @@ class XMLParser(Parser):
             path, attr = path.rsplit('.@')
             resolved = node.find(path, namespaces=self.nsmap).attrib.get(attr, "")
         else:
-            resolved = node.find(path, namespaces=self.nsmap).text or ""
+            if path == ".":
+                # this will get text in an XML node, regardless of placement
+                resolved = ''.join([text.strip() for text in node.xpath("text()")])
+            else:
+                resolved = node.find(path, namespaces=self.nsmap).text or ""
         return resolved.strip()
 
     def join_fields(self, node, fields):

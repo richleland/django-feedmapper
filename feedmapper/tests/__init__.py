@@ -24,6 +24,7 @@ class Thing(models.Model):
     nick = models.CharField(max_length=50)
     combined = models.TextField()
     other = models.CharField(max_length=50)
+    master = models.CharField(max_length=50)
 
     def convert_name(self, first_name, last_name):
         return "%s %s" % (first_name, last_name)
@@ -66,6 +67,11 @@ class FeedMapperTests(TestCase):
         "Ensure the parser can handle a one-to-many model field to feed nodes mapping."
         thing = Thing.objects.get(pk=1)
         self.assertEqual(thing.combined, "vader@sith.org Anakin Skywalker")
+
+    def test_parser_one_to_node_text(self):
+        "Ensure the parser can grab the text for the iterable nodes themselves."
+        thing = Thing.objects.get(pk=1)
+        self.assertEqual(thing.master, "My master was Obi-Wan Kenobi.")
 
     def test_parser_uses_default_value(self):
         "Ensure the parser uses a default value if necessary."

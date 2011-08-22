@@ -19,7 +19,8 @@
                             },
                             "other": {
                               "default": "default value from mapping"
-                            }
+                            },
+                            "master": "."
                         },
                         "identifier": "id",
                         "nodePath": "users.user"
