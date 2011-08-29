@@ -19,17 +19,13 @@ Make sure you have `virtualenvwrapper`_ installed and create a virtual environme
 .. _virtualenvwrapper: http://www.doughellmann.com/docs/virtualenvwrapper/
 
 Install the requirements::
-    
+
     pip install -r requirements.txt
 
-Synchronize the database::
+Synchronize the database and load the dummy data::
 
     cd example
     ./manage.py syncdb
-
-Load up some dummy data::
-
-    ./manage.py loaddata dev_data.json
 
 Synchronize the dummy data::
 
@@ -39,7 +35,8 @@ Fire up the development server::
 
     ./manage.py runserver
 
-Check out the sync results in the admin at http://localhost:8000/admin/myapp/thing/.
+Check out the feed mapping in the admin at http://localhost:8000/admin/feedmapper/mapping/1/
+and the sync results in the admin at http://localhost:8000/admin/myapp/thing/.
 
 Full documentation
 ******************

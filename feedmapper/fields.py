@@ -29,7 +29,7 @@ class JSONEncoder(simplejson.JSONEncoder):
 
 def dumps(value):
     assert isinstance(value, dict)
-    return JSONEncoder().encode(value)
+    return JSONEncoder(indent=4).encode(value)
 
 
 def loads(txt):
