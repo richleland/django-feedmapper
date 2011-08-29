@@ -127,12 +127,12 @@ class XMLParser(Parser):
                     instance.save()
             self.mapping.parse_succeeded = True
             self.mapping.parse_log = ""
-        except etree.Error, e:
+        except etree.Error as e:
             self.mapping.parse_succeeded = False
             self.mapping.parse_log = str(e.error_log)
-        except IOError, e:
+        except IOError as e:
             self.mapping.parse_succeeded = False
-            self.mapping.parse_log = e.message
+            self.mapping.parse_log = e
         # clear the lxml error log so errors don't compound
         etree.clear_error_log()
         self.mapping.save()
