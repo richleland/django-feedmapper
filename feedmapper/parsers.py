@@ -30,6 +30,16 @@ class Parser(object):
             return False
         return True
 
+    def generate_filter_kwargs(self, filter_string):
+        """
+        Convert a string to kwargs that can be passed to the Django ORM's filter
+        method. For example, 'slug__icontains="darth", name="Anakin"' will get
+        converted to {'slug__icontains': 'darth', 'name': 'Anakin'}.
+        """
+        filters = filter_string.replace('"', '').replace("'", '').split(',')
+        filter_kwargs = dict([filter.strip().split('=') for filter in filters])
+        return filter_kwargs
+
     def notify_failure(self, subject=None):
         "Notify recipients, if specified, of an error during parsing."
         if not subject:
@@ -80,6 +90,7 @@ class XMLParser(Parser):
             root = tree.getroot()
 
             model_mappings = self.mapping.data_map['models']
+            purge_filter = self.mapping.data_map.get('purge_filter')
             for model_string, configuration in model_mappings.items():
                 if not self.validate_model_format(model_string):
                     raise ValueError("Invalid model format in JSON mapping: %s" % model_string)
@@ -93,7 +104,12 @@ class XMLParser(Parser):
 
                 if self.mapping.purge:
                     # remove existing items
-                    model.objects.all().delete()
+                    existing_items = model.objects.all()
+                    if purge_filter:
+                        filter_kwargs = self.generate_filter_kwargs(purge_filter)
+                        if filter_kwargs:
+                            existing_items = existing_items.filter(**filter_kwargs)
+                    existing_items.delete()
 
                 for node in nodes:
                     if self.mapping.purge:

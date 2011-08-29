@@ -53,6 +53,12 @@ class FeedMapperTests(TestCase):
         model_string = 'myapp.fail.MyModel'
         self.assertFalse(self.parser.validate_model_format(model_string))
 
+    def test_parse_filter(self):
+        "Ensure that the parse filter returns a properly formatted dictionary."
+        filter_string = 'slug__icontains="darth", name="Anakin"'
+        filter_kwargs = {'slug__icontains': 'darth', 'name': 'Anakin'}
+        self.assertEqual(self.parser.generate_filter_kwargs(filter_string), filter_kwargs)
+
     def test_parser_one_to_one(self):
         "Ensure the parser can handle a one-to-one model field to feed node mapping."
         thing = Thing.objects.get(pk=1)
