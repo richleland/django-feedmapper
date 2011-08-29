@@ -132,7 +132,7 @@ class XMLParser(Parser):
             self.mapping.parse_log = str(e.error_log)
         except IOError as e:
             self.mapping.parse_succeeded = False
-            self.mapping.parse_log = e
+            self.mapping.parse_log = e.args[0]
         # clear the lxml error log so errors don't compound
         etree.clear_error_log()
         self.mapping.save()
