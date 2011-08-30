@@ -3,6 +3,29 @@ django-feedmapper
 
 django-feedmapper is a library for synchronizing data from feeds with Django models. The process of synchronizing the data requires the use of three pieces: a parser, a mapping, and a schedule.
 
+Installation
+************
+
+Install from PyPI::
+
+    pip install django-feedmapper
+
+Add ``feedmapper`` to your ``settings.py`` file::
+
+    INSTALLED_APPS = (
+        ...
+        'feedmapper',
+        ...
+    )
+
+If you are using South, run the migrations::
+
+    ./manage.py migrate feedmapper
+
+Otherwise, run ``syncdb``::
+
+    ./manage.py syncdb
+
 Parsers
 *******
 
