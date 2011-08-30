@@ -35,6 +35,14 @@ setup(
     namespace_packages=[],
     include_package_data = True,
     install_requires = read_file('requirements.txt'),
-    classifiers = [], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers = [
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Framework :: Django',
+    ],
 )
 
