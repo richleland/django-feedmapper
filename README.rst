@@ -41,12 +41,5 @@ and the sync results in the admin at http://localhost:8000/admin/myapp/thing/.
 Full documentation
 ******************
 
-The full documentation is in the ``docs`` folder. You'll need to have Sphinx installed to build the documentation::
+Documentation is on Read the Docs: http://readthedocs.org/docs/django-feedmapper/.
 
-    pip install Sphinx
-
-Building the documentation is easy::
-
-    cd django-feedmapper/docs/
-    make html
-    open build/html/index.html
