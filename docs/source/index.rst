@@ -177,6 +177,21 @@ If you only want to sync a subset of the mappings you can supply one or more map
 .. _django-celery: http://packages.python.org/django-celery/
 .. _custom scheduler classes: http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html#using-custom-scheduler-classes
 
+Contributing
+************
+
+To contribute to django-feedmapper `create a fork`_ on github. Clone your fork, make some changes, and submit a pull request.
+
+.. _create a fork: https://github.com/natgeo/django-feedmapper
+
+Issues
+******
+
+Use the github `issue tracker`_ for django-feedmapper to submit bugs, issues, and feature requests.
+
+.. _issue tracker: https://github.com/natgeo/django-feedmapper/issues
+
+
 Contents
 ********
 
