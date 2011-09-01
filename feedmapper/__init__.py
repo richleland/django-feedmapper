@@ -4,7 +4,7 @@ A utility for mapping feeds to Django models.
 __version_info__ = {
     'major': 1,
     'minor': 0,
-    'micro': 1,
+    'micro': 2,
     'releaselevel': 'final',
     'serial': 0
 }
