@@ -1,0 +1,19 @@
+django-feedmapper change log
+============================
+
+2011-09-01 Version 1.0.2
+************************
+
+* Fixed unicode dictionary key issue. See `gh2`_.
+
+.. _gh2: https://github.com/natgeo/django-feedmapper/issues/2
+
+2011-08-31 Version 1.0.1
+************************
+
+* Removed Django from requirements
+
+2011-08-30 Version 1.0
+**********************
+
+* Initial release. Yay!
