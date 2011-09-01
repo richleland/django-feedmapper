@@ -37,7 +37,7 @@ class Parser(object):
         converted to {'slug__icontains': 'darth', 'name': 'Anakin'}.
         """
         filters = filter_string.replace('"', '').replace("'", '').split(',')
-        filter_kwargs = dict([filter.strip().split('=') for filter in filters])
+        filter_kwargs = dict([str(filter).strip().split('=') for filter in filters])
         return filter_kwargs
 
     def notify_failure(self, subject=None):
